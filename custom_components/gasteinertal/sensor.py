@@ -26,7 +26,6 @@ SENSORS = (
         name="Wasserstand Gasteiner Ache",
         icon="mdi:waves-arrow-up",
         native_unit_of_measurement=UnitOfLength.CENTIMETERS,
-        device_class=SensorDeviceClass.WATER_LEVEL,
         state_class=SensorStateClass.MEASUREMENT,
     ),
     SensorEntityDescription(
