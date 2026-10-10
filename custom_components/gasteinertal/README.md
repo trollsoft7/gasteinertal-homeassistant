@@ -32,6 +32,14 @@ Home Assistant Custom Integration für Live-Daten aus dem Gasteinertal.
 - Messwert: Niederschlagssumme des 10-Minuten-Intervalls (`rr`)
 - Einheit: `mm`
 
+### Niederschlag seit Jahresbeginn Bad Gastein
+- Entity: `sensor.niederschlag_seit_jahresbeginn_bad_gastein`
+- Datenquelle: https://dataset.api.hub.geosphere.at/v1/station/historical/klima-v2-1d
+- Station: Bad Gastein, 1092 m, Stations-ID `7`
+- Messwert: Summe der verfügbaren täglichen Niederschlagswerte (`rr`) seit Jahresanfang
+- Einheit: `mm`
+- Attribut `fehlende_tageswerte` zählt fehlende oder ungültige Tageswerte, die nicht mit aufsummiert werden.
+
 ## Wetterwarnungen
 
 Die `binary_sensor.wetterwarnung_heute_*` zeigen an, ob es für den jeweiligen

@@ -58,6 +58,14 @@ SENSORS = (
         device_class=SensorDeviceClass.PRECIPITATION,
         state_class=SensorStateClass.MEASUREMENT,
     ),
+    SensorEntityDescription(
+        key="bad_gastein_precipitation_ytd",
+        name="Niederschlag seit Jahresbeginn Bad Gastein",
+        icon="mdi:weather-pouring",
+        native_unit_of_measurement=UnitOfPrecipitationDepth.MILLIMETERS,
+        device_class=SensorDeviceClass.PRECIPITATION,
+        state_class=SensorStateClass.TOTAL_INCREASING,
+    ),
 )
 
 
@@ -96,3 +104,15 @@ class GasteinertalSensor(CoordinatorEntity, SensorEntity):
     def native_value(self) -> float:
         """Return the latest measurement."""
         return self.coordinator.data[self.entity_description.key]
+
+    @property
+    def extra_state_attributes(self) -> dict[str, int]:
+        """Return data completeness metadata for the yearly sum."""
+        if self.entity_description.key != "bad_gastein_precipitation_ytd":
+            return {}
+        return {
+            "jahr": self.coordinator.data["precipitation_year"],
+            "fehlende_tageswerte": self.coordinator.data[
+                "bad_gastein_precipitation_ytd_missing_days"
+            ],
+        }

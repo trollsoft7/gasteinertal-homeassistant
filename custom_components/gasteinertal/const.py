@@ -12,6 +12,10 @@ GEOSPHERE_URL = (
     "https://dataset.api.hub.geosphere.at/v1/station/historical/"
     "klima-v2-10min"
 )
+GEOSPHERE_DAILY_URL = (
+    "https://dataset.api.hub.geosphere.at/v1/station/historical/"
+    "klima-v2-1d"
+)
 GEOSPHERE_STATION_ID = "7"
 WATER_STATION_NAME = "Bad Hofgastein"
 MOUNTAIN_STATION_NAME = "badhofgastein_schlossalm"

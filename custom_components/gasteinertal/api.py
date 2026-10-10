@@ -13,6 +13,7 @@ from aiohttp import ClientSession
 
 from .const import (
     GEOSPHERE_STATION_ID,
+    GEOSPHERE_DAILY_URL,
     GEOSPHERE_URL,
     MOUNTAIN_STATION_NAME,
     STATION_URL,
@@ -33,19 +34,36 @@ async def async_fetch_data(session: ClientSession) -> dict[str, Any]:
         "end": end,
         "station_ids": GEOSPHERE_STATION_ID,
     }
+    year_start = now.replace(month=1, day=1, hour=0, minute=0, second=0, microsecond=0)
+    daily_params = {
+        "parameters": "rr",
+        "start": year_start.strftime("%Y-%m-%dT%H:%M"),
+        "end": end,
+        "station_ids": GEOSPHERE_STATION_ID,
+    }
 
-    water_data, station_text, geosphere_data, warning_data = await asyncio.gather(
+    (
+        water_data,
+        station_text,
+        geosphere_data,
+        yearly_precipitation_data,
+        warning_data,
+    ) = await asyncio.gather(
         _async_fetch_json(session, WATER_URL),
         _async_fetch_text(session, STATION_URL),
         _async_fetch_json(session, GEOSPHERE_URL, params=geosphere_params),
+        _async_fetch_json(session, GEOSPHERE_DAILY_URL, params=daily_params),
         _async_fetch_warnings(session),
     )
     weather_data = parse_geosphere_data(geosphere_data)
+    yearly_precipitation = parse_yearly_precipitation(yearly_precipitation_data)
 
     return {
         "water_level": parse_water_level(water_data),
         "mountain_temperature": parse_mountain_temperature(station_text),
+        "precipitation_year": now.year,
         **weather_data,
+        **yearly_precipitation,
         **warning_data,
     }
 
@@ -163,6 +181,49 @@ def parse_geosphere_data(data: Any) -> dict[str, float]:
         "bad_gastein_precipitation": _latest_numeric_value(
             parameters, "rr", "Bad Gastein precipitation"
         ),
+    }
+
+
+def parse_yearly_precipitation(data: Any) -> dict[str, int | float]:
+    """Sum valid daily precipitation values from the start of the year."""
+    if not isinstance(data, dict) or not isinstance(data.get("features"), list):
+        raise ValueError("GeoSphere daily data must contain a features list")
+
+    properties = next(
+        (
+            item["properties"]
+            for item in data["features"]
+            if isinstance(item, dict)
+            and isinstance(item.get("properties"), dict)
+            and item["properties"].get("station") == int(GEOSPHERE_STATION_ID)
+        ),
+        None,
+    )
+    if properties is None:
+        raise ValueError("GeoSphere station Bad Gastein was not found in daily data")
+
+    try:
+        values = properties["parameters"]["rr"]["data"]
+    except (KeyError, TypeError) as err:
+        raise ValueError("Yearly precipitation is missing from the response") from err
+    if not isinstance(values, list):
+        raise ValueError("Invalid daily precipitation series")
+
+    valid_values = []
+    for value in values:
+        if value is None or (
+            isinstance(value, (int, float))
+            and not isinstance(value, bool)
+            and value < 0
+        ):
+            continue
+        valid_values.append(_numeric_value(value, "daily precipitation"))
+    if not valid_values:
+        raise ValueError("No valid daily precipitation values in the response")
+
+    return {
+        "bad_gastein_precipitation_ytd": math.fsum(valid_values),
+        "bad_gastein_precipitation_ytd_missing_days": len(values) - len(valid_values),
     }
 
 

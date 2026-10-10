@@ -37,7 +37,14 @@ Home Assistant Custom Integration für Live-Daten aus dem Gasteinertal:
 - Messwert: Niederschlagssumme der letzten 10 Minuten (`rr`)
 - Einheit: `mm`
 
-Die GeoSphere-Messwerte werden alle zehn Minuten aktualisiert. Die Niederschlagsmessung ist die Summe des jeweiligen 10-Minuten-Intervalls, kein Tages- oder Dauergesamtwert.
+### `sensor.niederschlag_seit_jahresbeginn_bad_gastein`
+- Quelle: [GeoSphere Austria tägliche Stationsdaten](https://dataset.api.hub.geosphere.at/v1/station/historical/klima-v2-1d)
+- Station: Bad Gastein, 1092 m, Stations-ID `7`
+- Messwert: Summe der verfügbaren Tages-Niederschlagswerte (`rr`) seit Jahresanfang
+- Einheit: `mm`
+- Attribut `fehlende_tageswerte`: Anzahl der fehlenden/ungültigen Tageswerte, die nicht in die Summe eingehen
+
+Die GeoSphere-Messwerte werden alle zehn Minuten aktualisiert. Der 10-Minuten-Sensor zeigt die Niederschlagssumme dieses Intervalls. Der Jahressensor summiert die verfügbaren täglichen Niederschlagssummen seit Jahresbeginn; fehlende oder ungültige Tageswerte werden ausgelassen und über das Attribut `fehlende_tageswerte` ausgewiesen.
 
 ### Wetterwarnungen
 
