@@ -2,6 +2,8 @@
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://github.com/hacs/integration)
 
+<img src="https://raw.githubusercontent.com/trollsoft7/gasteinertal-homeassistant/main/assets/gasteinertal-icon.svg" alt="Gasteinertal Icon" width="180" />
+
 Home Assistant Custom Integration für Live-Daten aus dem Gasteinertal:
 
 - Wasserstand der Gasteiner Ache in Bad Hofgastein
