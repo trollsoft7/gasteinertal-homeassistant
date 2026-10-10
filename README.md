@@ -18,7 +18,8 @@ Home Assistant Custom Integration für Live-Daten aus dem Gasteinertal:
 - Station: `Bad Hofgastein`
 - Einheit: `cm`
 
-### `sensor.temperatur_gastein_berg`
+### `sensor.temperatur_schlossalm`
+- Bezeichnung: Temperatur Schlossalm
 - Quelle: https://www.salzburg.gv.at/lawine/Station.js
 - Wert: `measuredData.values.LT`
 - Station: `badhofgastein_schlossalm`

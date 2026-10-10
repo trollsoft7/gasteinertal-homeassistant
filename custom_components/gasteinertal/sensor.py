@@ -30,7 +30,7 @@ SENSORS = (
     ),
     SensorEntityDescription(
         key="mountain_temperature",
-        name="Temperatur Gastein Berg",
+        name="Temperatur Schlossalm",
         icon="mdi:thermometer",
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
         device_class=SensorDeviceClass.TEMPERATURE,
