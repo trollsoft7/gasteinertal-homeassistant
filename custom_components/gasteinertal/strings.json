@@ -1,0 +1,10 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Gasteinertal",
+        "description": "Fügt Wasserstand, Bergtemperatur und Webcams aus dem Gasteinertal hinzu."
+      }
+    }
+  }
+}
