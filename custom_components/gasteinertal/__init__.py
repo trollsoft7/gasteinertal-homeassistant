@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+from typing import Any
 
 from aiohttp import ClientError
 from homeassistant.config_entries import ConfigEntry
@@ -20,7 +21,7 @@ from .const import DOMAIN, PLATFORMS, SCAN_INTERVAL
 _LOGGER = logging.getLogger(__name__)
 
 
-class GasteinertalCoordinator(DataUpdateCoordinator[dict[str, float]]):
+class GasteinertalCoordinator(DataUpdateCoordinator[dict[str, Any]]):
     """Fetch the integration's measurements from Salzburg state endpoints."""
 
     def __init__(self, hass: HomeAssistant) -> None:
@@ -32,7 +33,7 @@ class GasteinertalCoordinator(DataUpdateCoordinator[dict[str, float]]):
         )
         self.session = async_get_clientsession(hass)
 
-    async def _async_update_data(self) -> dict[str, float]:
+    async def _async_update_data(self) -> dict[str, Any]:
         try:
             return await async_fetch_data(self.session)
         except (ClientError, TimeoutError, ValueError) as err:

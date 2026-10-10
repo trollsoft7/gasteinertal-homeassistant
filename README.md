@@ -25,6 +25,30 @@ Home Assistant Custom Integration für Live-Daten aus dem Gasteinertal:
 - Station: `badhofgastein_schlossalm`
 - Einheit: `°C`
 
+### `sensor.temperatur_bad_gastein`
+- Quelle: [GeoSphere Austria Stationsdaten](https://dataset.api.hub.geosphere.at/v1/station/historical/klima-v2-10min)
+- Station: Bad Gastein, 1092 m, Stations-ID `7`
+- Messwert: Lufttemperatur in 2 m Höhe (`tl`)
+- Einheit: `°C`
+
+### `sensor.niederschlag_letzte_10_min_bad_gastein`
+- Quelle: [GeoSphere Austria Stationsdaten](https://dataset.api.hub.geosphere.at/v1/station/historical/klima-v2-10min)
+- Station: Bad Gastein, 1092 m, Stations-ID `7`
+- Messwert: Niederschlagssumme der letzten 10 Minuten (`rr`)
+- Einheit: `mm`
+
+Die GeoSphere-Messwerte werden alle zehn Minuten aktualisiert. Die Niederschlagsmessung ist die Summe des jeweiligen 10-Minuten-Intervalls, kein Tages- oder Dauergesamtwert.
+
+### Wetterwarnungen
+
+Die drei `binary_sensor.wetterwarnung_heute_*` zeigen an, ob auf der jeweiligen Gemeindeseite für heute mindestens eine Warnstufe ausgegeben wird. `on` bedeutet, dass heute irgendwann eine Warnung gilt; die Attribute `warnstufe` (`0` bis `3`) und `warnfarbe` (`green`, `yellow`, `orange`, `red`) zeigen die höchste Tagesstufe.
+
+- Bad Gastein: http://warnungen.zamg.ac.at/html/de/heute/alle/at/salzburg/sankt_johann_im_pongau/badgastein/
+- Bad Hofgastein: http://warnungen.zamg.ac.at/html/de/heute/alle/at/salzburg/sankt_johann_im_pongau/bad_hofgastein/
+- Dorfgastein: http://warnungen.zamg.ac.at/html/de/heute/alle/at/salzburg/sankt_johann_im_pongau/dorfgastein/
+
+Die Warnungsseiten sind derzeit nur über HTTP erreichbar; Home Assistant fragt sie daher unverschlüsselt ab. Die Integration zeigt den höchsten Warnlevel des heutigen Tages an, nicht ausschließlich eine Warnung, die genau zum aktuellen Zeitpunkt aktiv ist.
+
 ### Webcams
 
 Alle Kameras sind im Gasteinertal. Die Bild-URLs stammen von Gasteinertal.com:
@@ -50,9 +74,11 @@ Alle Kameras sind im Gasteinertal. Die Bild-URLs stammen von Gasteinertal.com:
 Die Daten stammen direkt aus den offiziellen öffentlichen Quellen des Landes
 Salzburg und der Region Gasteinertal:
 
-- Wasserstand: Salzburg Wasser / Hydro
-- Bergtemperatur: Lawinenlage / Stationen Salzburg
-- Webcams: gasteinertal.com
+- Wasserstand: [Salzburg Wasser / Hydro](https://www.salzburg.gv.at/wasser/hydro/grafiken/data.json)
+- Temperatur Schlossalm: [Salzburger Lawinenlagebericht / Station.js](https://www.salzburg.gv.at/lawine/Station.js)
+- Temperatur und Niederschlag Bad Gastein: [GeoSphere Austria Data Hub, 10-Minuten-Stationsdaten](https://dataset.api.hub.geosphere.at/v1/station/historical/klima-v2-10min)
+- Wetterwarnungen: [ZAMG-Warnseiten Bad Gastein](http://warnungen.zamg.ac.at/html/de/heute/alle/at/salzburg/sankt_johann_im_pongau/badgastein/), [Bad Hofgastein](http://warnungen.zamg.ac.at/html/de/heute/alle/at/salzburg/sankt_johann_im_pongau/bad_hofgastein/) und [Dorfgastein](http://warnungen.zamg.ac.at/html/de/heute/alle/at/salzburg/sankt_johann_im_pongau/dorfgastein/)
+- Webcams: [gasteinertal.com](https://www.gasteinertal.com/webcam/)
 
 Die Nutzung der Integration erfolgt auf eigene Verantwortung. Verfügbarkeit,
 Aktualität und Richtigkeit der externen Daten können nicht garantiert werden.

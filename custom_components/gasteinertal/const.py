@@ -3,13 +3,42 @@
 from datetime import timedelta
 
 DOMAIN = "gasteinertal"
-PLATFORMS = ("sensor", "camera")
+PLATFORMS = ("sensor", "binary_sensor", "camera")
 SCAN_INTERVAL = timedelta(minutes=10)
 
 WATER_URL = "https://www.salzburg.gv.at/wasser/hydro/grafiken/data.json"
 STATION_URL = "https://www.salzburg.gv.at/lawine/Station.js"
+GEOSPHERE_URL = (
+    "https://dataset.api.hub.geosphere.at/v1/station/historical/"
+    "klima-v2-10min"
+)
+GEOSPHERE_STATION_ID = "7"
 WATER_STATION_NAME = "Bad Hofgastein"
 MOUNTAIN_STATION_NAME = "badhofgastein_schlossalm"
+
+WEATHER_WARNINGS = {
+    "badgastein": {
+        "name": "Bad Gastein",
+        "url": (
+            "http://warnungen.zamg.ac.at/html/de/heute/alle/at/salzburg/"
+            "sankt_johann_im_pongau/badgastein/"
+        ),
+    },
+    "badhofgastein": {
+        "name": "Bad Hofgastein",
+        "url": (
+            "http://warnungen.zamg.ac.at/html/de/heute/alle/at/salzburg/"
+            "sankt_johann_im_pongau/bad_hofgastein/"
+        ),
+    },
+    "dorfgastein": {
+        "name": "Dorfgastein",
+        "url": (
+            "http://warnungen.zamg.ac.at/html/de/heute/alle/at/salzburg/"
+            "sankt_johann_im_pongau/dorfgastein/"
+        ),
+    },
+}
 
 CAMERAS = {
     "badhofgastein": {

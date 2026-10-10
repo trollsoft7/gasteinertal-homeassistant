@@ -18,6 +18,34 @@ Home Assistant Custom Integration für Live-Daten aus dem Gasteinertal.
 - Einheit: `°C`
 - Station: `badhofgastein_schlossalm`
 
+### Temperatur Bad Gastein
+- Entity: `sensor.temperatur_bad_gastein`
+- Datenquelle: https://dataset.api.hub.geosphere.at/v1/station/historical/klima-v2-10min
+- Station: Bad Gastein, 1092 m, Stations-ID `7`
+- Messwert: Lufttemperatur in 2 m Höhe (`tl`)
+- Einheit: `°C`
+
+### Niederschlag letzte 10 Min Bad Gastein
+- Entity: `sensor.niederschlag_letzte_10_min_bad_gastein`
+- Datenquelle: https://dataset.api.hub.geosphere.at/v1/station/historical/klima-v2-10min
+- Station: Bad Gastein, 1092 m, Stations-ID `7`
+- Messwert: Niederschlagssumme des 10-Minuten-Intervalls (`rr`)
+- Einheit: `mm`
+
+## Wetterwarnungen
+
+Die `binary_sensor.wetterwarnung_heute_*` zeigen an, ob es für den jeweiligen
+Ort heute mindestens eine Warnung gibt. Attribute enthalten die höchste
+Tages-Warnstufe (`0` bis `3`) und deren Farbe. Ein aktiver Sensor bedeutet
+nicht zwingend, dass die Warnung gerade jetzt gilt.
+
+- Bad Gastein: http://warnungen.zamg.ac.at/html/de/heute/alle/at/salzburg/sankt_johann_im_pongau/badgastein/
+- Bad Hofgastein: http://warnungen.zamg.ac.at/html/de/heute/alle/at/salzburg/sankt_johann_im_pongau/bad_hofgastein/
+- Dorfgastein: http://warnungen.zamg.ac.at/html/de/heute/alle/at/salzburg/sankt_johann_im_pongau/dorfgastein/
+
+Die ZAMG-Seiten sind derzeit nur per HTTP erreichbar; Warnungsabfragen erfolgen
+daher unverschlüsselt.
+
 ## Webcams
 
 Die Integration bietet 13 Webcam-Ansichten an. Alle Kameras liegen im

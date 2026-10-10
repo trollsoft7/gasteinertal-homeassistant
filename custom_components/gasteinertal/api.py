@@ -2,35 +2,86 @@
 
 from __future__ import annotations
 
+import asyncio
 import json
 import math
 import re
+from datetime import datetime, timedelta, timezone
 from typing import Any
 
 from aiohttp import ClientSession
 
 from .const import (
+    GEOSPHERE_STATION_ID,
+    GEOSPHERE_URL,
     MOUNTAIN_STATION_NAME,
     STATION_URL,
     WATER_STATION_NAME,
     WATER_URL,
+    WEATHER_WARNINGS,
 )
 
 
-async def async_fetch_data(session: ClientSession) -> dict[str, float]:
-    """Fetch and parse both Gasteinertal measurements."""
-    async with session.get(WATER_URL) as response:
-        response.raise_for_status()
-        water_data = await response.json(content_type=None)
+async def async_fetch_data(session: ClientSession) -> dict[str, Any]:
+    """Fetch and parse Gasteinertal measurements and weather warnings."""
+    now = datetime.now(timezone.utc)
+    start = (now - timedelta(hours=1)).strftime("%Y-%m-%dT%H:%M")
+    end = now.strftime("%Y-%m-%dT%H:%M")
+    geosphere_params = {
+        "parameters": "tl,rr",
+        "start": start,
+        "end": end,
+        "station_ids": GEOSPHERE_STATION_ID,
+    }
 
-    async with session.get(STATION_URL) as response:
-        response.raise_for_status()
-        station_text = await response.text()
+    water_data, station_text, geosphere_data, warning_data = await asyncio.gather(
+        _async_fetch_json(session, WATER_URL),
+        _async_fetch_text(session, STATION_URL),
+        _async_fetch_json(session, GEOSPHERE_URL, params=geosphere_params),
+        _async_fetch_warnings(session),
+    )
+    weather_data = parse_geosphere_data(geosphere_data)
 
     return {
         "water_level": parse_water_level(water_data),
         "mountain_temperature": parse_mountain_temperature(station_text),
+        **weather_data,
+        **warning_data,
     }
+
+
+async def _async_fetch_json(
+    session: ClientSession, url: str, *, params: dict[str, str] | None = None
+) -> Any:
+    """Fetch a JSON response."""
+    async with session.get(url, params=params) as response:
+        response.raise_for_status()
+        return await response.json(content_type=None)
+
+
+async def _async_fetch_text(session: ClientSession, url: str) -> str:
+    """Fetch a text response."""
+    async with session.get(url) as response:
+        response.raise_for_status()
+        return await response.text()
+
+
+async def _async_fetch_warnings(session: ClientSession) -> dict[str, dict[str, Any]]:
+    """Fetch today's warning level for each Gasteinertal municipality."""
+
+    async def fetch_warning(key: str, url: str) -> tuple[str, dict[str, Any]]:
+        async with session.get(url) as response:
+            response.raise_for_status()
+            text = await response.text()
+        return key, parse_warning_level(text)
+
+    results = await asyncio.gather(
+        *(
+            fetch_warning(key, warning["url"])
+            for key, warning in WEATHER_WARNINGS.items()
+        )
+    )
+    return {f"warning_{key}": warning for key, warning in results}
 
 
 def parse_water_level(data: Any) -> float:
@@ -84,6 +135,91 @@ def parse_mountain_temperature(text: str) -> float:
                 return _numeric_value(value, "mountain temperature")
 
     raise ValueError(f"Mountain station {MOUNTAIN_STATION_NAME!r} was not found")
+
+
+def parse_geosphere_data(data: Any) -> dict[str, float]:
+    """Extract the latest temperature and precipitation from GeoSphere data."""
+    if not isinstance(data, dict) or not isinstance(data.get("features"), list):
+        raise ValueError("GeoSphere data must contain a features list")
+
+    properties = next(
+        (
+            item["properties"]
+            for item in data["features"]
+            if isinstance(item, dict)
+            and isinstance(item.get("properties"), dict)
+            and item["properties"].get("station") == int(GEOSPHERE_STATION_ID)
+        ),
+        None,
+    )
+    if properties is None:
+        raise ValueError("GeoSphere station Bad Gastein was not found")
+
+    parameters = properties.get("parameters", {})
+    return {
+        "bad_gastein_temperature": _latest_numeric_value(
+            parameters, "tl", "Bad Gastein temperature"
+        ),
+        "bad_gastein_precipitation": _latest_numeric_value(
+            parameters, "rr", "Bad Gastein precipitation"
+        ),
+    }
+
+
+def _latest_numeric_value(
+    parameters: dict[str, Any], key: str, description: str
+) -> float:
+    """Return the most recent numeric value from a GeoSphere time series."""
+    try:
+        values = parameters[key]["data"]
+    except (KeyError, TypeError) as err:
+        raise ValueError(f"{description} is missing from the response") from err
+    if not isinstance(values, list):
+        raise ValueError(f"Invalid {description} series")
+
+    for value in reversed(values):
+        if value is not None:
+            return _numeric_value(value, description)
+    raise ValueError(f"No valid {description} value in the response")
+
+
+def parse_warning_level(text: str) -> dict[str, Any]:
+    """Parse the maximum warning level shown for today on a ZAMG page."""
+    table_match = re.search(
+        r"<table\b[^>]*\bid=[\"']daymax[\"'][^>]*>(.*?)</table>",
+        text,
+        re.IGNORECASE | re.DOTALL,
+    )
+    if table_match is None:
+        raise ValueError("ZAMG warning page did not contain the day-level table")
+
+    row_match = re.search(
+        r"<tr\b[^>]*\bclass=[\"'][^\"']*\bwarnlevels\b[^\"']*[\"'][^>]*>(.*?)</tr>",
+        table_match.group(1),
+        re.IGNORECASE | re.DOTALL,
+    )
+    if row_match is None:
+        raise ValueError("ZAMG warning page did not contain today's warning level")
+
+    cell_match = re.search(
+        r"<td\b[^>]*\bclass=[\"']([^\"']*)[\"'][^>]*>",
+        row_match.group(1),
+        re.IGNORECASE | re.DOTALL,
+    )
+    if cell_match is None:
+        raise ValueError("ZAMG warning level is missing")
+
+    classes = cell_match.group(1).lower().split()
+    level_by_color = {"green": 0, "yellow": 1, "orange": 2, "red": 3}
+    color = next((name for name in level_by_color if name in classes), None)
+    if color is None:
+        raise ValueError(f"Unknown ZAMG warning level classes: {classes}")
+
+    return {
+        "active": level_by_color[color] > 0,
+        "level": level_by_color[color],
+        "level_name": color,
+    }
 
 
 def _numeric_value(value: Any, description: str) -> float:

@@ -6,5 +6,5 @@
   "documentation": "https://github.com/trollsoft7/gasteinertal-homeassistant",
   "iot_class": "cloud_polling",
   "requirements": [],
-  "version": "1.0.6"
+  "version": "1.0.7"
 }
