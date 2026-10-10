@@ -32,4 +32,36 @@ CAMERAS = {
         "name": "Sportgastein",
         "url": "https://www.gasteinertal.com/webcam/sportgastein/current/1200.jpg",
     },
+    "sportgastein_siglitztal": {
+        "name": "Sportgastein Siglitztal",
+        "url": "https://www.gasteinertal.com/webcam/sportgastein2/current/1200.jpg",
+    },
+    "badgastein_zentrum": {
+        "name": "Bad Gastein Zentrum",
+        "url": "https://www.gasteinertal.com/webcam/badgastein2/current/1200.jpg",
+    },
+    "schlossalm_snowcam": {
+        "name": "Schlossalm Snowcam",
+        "url": "https://camhost1.gasteinertal.com/webcam/snowcam/current/1200.jpg",
+    },
+    "golfplatz": {
+        "name": "Golfplatz Bad Gastein",
+        "url": "https://www.gasteinertal.com/webcam/golfgastein/current/1200.jpg",
+    },
+    "wasserfall": {
+        "name": "Wasserfall Bad Gastein",
+        "url": "https://www.gasteinertal.com/webcam/wasserfall/current/816.jpg",
+    },
+    "jungeralm": {
+        "name": "Jungeralm Stubnerkogel",
+        "url": "https://www.gasteinertal.com/webcam/jungeralm.jpg",
+    },
+    "dorfgastein_talabfahrt": {
+        "name": "Dorfgastein Talabfahrt",
+        "url": "https://camhost1.gasteinertal.com/webcam/hauserbauer/current/1200.jpg",
+    },
+    "angertal": {
+        "name": "Angertal Skizentrum",
+        "url": "https://www.gasteinertal.com/webcam/angertal/current/1200.jpg",
+    },
 }

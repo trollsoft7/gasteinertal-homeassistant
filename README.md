@@ -8,7 +8,7 @@ Home Assistant Custom Integration für Live-Daten aus dem Gasteinertal:
 
 - Wasserstand der Gasteiner Ache in Bad Hofgastein
 - Lufttemperatur auf der Schlossalm / Gastein Berg
-- 5 Live-Webcams aus dem Feriengebiet
+- 13 Live-Webcams aus dem Feriengebiet
 
 ## Entitäten
 
@@ -26,11 +26,24 @@ Home Assistant Custom Integration für Live-Daten aus dem Gasteinertal:
 - Einheit: `°C`
 
 ### Webcams
-- Bad Hofgastein
-- Haitzingalm
-- Kühhager
-- Bad Gastein
-- Sportgastein
+
+Alle Kameras sind im Gasteinertal. Die Bild-URLs stammen von Gasteinertal.com:
+
+| Kamera | Live-Bild | Kameraseite |
+| --- | --- | --- |
+| Bad Hofgastein | [JPEG](https://www.gasteinertal.com/webcam/badhofgastein/current/1200.jpg) | [Webcam](https://www.gasteinertal.com/webcam/badhofgastein.html) |
+| Haitzingalm | [JPEG](https://www.gasteinertal.com/webcam/haitzingalm/current/1200.jpg) | [Webcam](https://www.gasteinertal.com/webcam/haitzingalm.html) |
+| Kühhager | [JPEG](https://www.gasteinertal.com/webcam/kuehhager/current/1200.jpg) | [Fulseck](https://www.gasteinertal.com/webcam/fulseck.html) |
+| Bad Gastein | [JPEG](https://www.gasteinertal.com/webcam/badgastein/current/1200.jpg) | [Webcam](https://www.gasteinertal.com/webcam/badgastein.html) |
+| Sportgastein | [JPEG](https://www.gasteinertal.com/webcam/sportgastein/current/1200.jpg) | [Webcam](https://www.gasteinertal.com/webcam/sportgastein-nassfeld.html) |
+| Sportgastein Siglitztal | [JPEG](https://www.gasteinertal.com/webcam/sportgastein2/current/1200.jpg) | [Webcam](https://www.gasteinertal.com/webcam/sportgastein-siglitztal.html) |
+| Bad Gastein Zentrum | [JPEG](https://www.gasteinertal.com/webcam/badgastein2/current/1200.jpg) | [Webcam](https://www.gasteinertal.com/webcam/badgastein2.html) |
+| Schlossalm Snowcam | [JPEG](https://camhost1.gasteinertal.com/webcam/snowcam/current/1200.jpg) | [Webcam](https://www.gasteinertal.com/webcam/snowcam.html) |
+| Golfplatz Bad Gastein | [JPEG](https://www.gasteinertal.com/webcam/golfgastein/current/1200.jpg) | [Webcam](https://www.gasteinertal.com/webcam/golf.html) |
+| Wasserfall Bad Gastein | [JPEG](https://www.gasteinertal.com/webcam/wasserfall/current/816.jpg) | [Webcam](https://www.gasteinertal.com/webcam/wasserfall-badgastein.html) |
+| Jungeralm Stubnerkogel | [JPEG](https://www.gasteinertal.com/webcam/jungeralm.jpg) | [Webcam](https://www.gasteinertal.com/webcam/jungeralm.html) |
+| Dorfgastein Talabfahrt | [JPEG](https://camhost1.gasteinertal.com/webcam/hauserbauer/current/1200.jpg) | [Webcam](https://www.gasteinertal.com/webcam/dorfgastein-hauserbauer.html) |
+| Angertal Skizentrum | [JPEG](https://www.gasteinertal.com/webcam/angertal/current/1200.jpg) | [Webcam](https://www.gasteinertal.com/webcam/angertal.html) |
 
 ## Woher kommen die Daten?
 
@@ -40,6 +53,9 @@ Salzburg und der Region Gasteinertal:
 - Wasserstand: Salzburg Wasser / Hydro
 - Bergtemperatur: Lawinenlage / Stationen Salzburg
 - Webcams: gasteinertal.com
+
+Die Nutzung der Integration erfolgt auf eigene Verantwortung. Verfügbarkeit,
+Aktualität und Richtigkeit der externen Daten können nicht garantiert werden.
 
 ## Installation (HACS-konform)
 

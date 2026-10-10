@@ -20,22 +20,28 @@ Home Assistant Custom Integration für Live-Daten aus dem Gasteinertal.
 
 ## Webcams
 
-Die Integration bietet die folgenden Webcam-Ansichten an:
+Die Integration bietet 13 Webcam-Ansichten an. Alle Kameras liegen im
+Gasteinertal:
 
-- Bad Hofgastein
-- Haitzingalm
-- Kühhager
-- Bad Gastein
-- Sportgastein
-
-Quellen:
-
-- https://www.gasteinertal.com/webcam/badhofgastein/current/1200.jpg
-- https://www.gasteinertal.com/webcam/haitzingalm/current/1200.jpg
-- https://www.gasteinertal.com/webcam/kuehhager/current/1200.jpg
-- https://www.gasteinertal.com/webcam/badgastein/current/1200.jpg
-- https://www.gasteinertal.com/webcam/sportgastein/current/1200.jpg
+| Kamera | Live-Bild | Kameraseite |
+| --- | --- | --- |
+| Bad Hofgastein | https://www.gasteinertal.com/webcam/badhofgastein/current/1200.jpg | https://www.gasteinertal.com/webcam/badhofgastein.html |
+| Haitzingalm | https://www.gasteinertal.com/webcam/haitzingalm/current/1200.jpg | https://www.gasteinertal.com/webcam/haitzingalm.html |
+| Kühhager | https://www.gasteinertal.com/webcam/kuehhager/current/1200.jpg | https://www.gasteinertal.com/webcam/fulseck.html |
+| Bad Gastein | https://www.gasteinertal.com/webcam/badgastein/current/1200.jpg | https://www.gasteinertal.com/webcam/badgastein.html |
+| Sportgastein | https://www.gasteinertal.com/webcam/sportgastein/current/1200.jpg | https://www.gasteinertal.com/webcam/sportgastein-nassfeld.html |
+| Sportgastein Siglitztal | https://www.gasteinertal.com/webcam/sportgastein2/current/1200.jpg | https://www.gasteinertal.com/webcam/sportgastein-siglitztal.html |
+| Bad Gastein Zentrum | https://www.gasteinertal.com/webcam/badgastein2/current/1200.jpg | https://www.gasteinertal.com/webcam/badgastein2.html |
+| Schlossalm Snowcam | https://camhost1.gasteinertal.com/webcam/snowcam/current/1200.jpg | https://www.gasteinertal.com/webcam/snowcam.html |
+| Golfplatz Bad Gastein | https://www.gasteinertal.com/webcam/golfgastein/current/1200.jpg | https://www.gasteinertal.com/webcam/golf.html |
+| Wasserfall Bad Gastein | https://www.gasteinertal.com/webcam/wasserfall/current/816.jpg | https://www.gasteinertal.com/webcam/wasserfall-badgastein.html |
+| Jungeralm Stubnerkogel | https://www.gasteinertal.com/webcam/jungeralm.jpg | https://www.gasteinertal.com/webcam/jungeralm.html |
+| Dorfgastein Talabfahrt | https://camhost1.gasteinertal.com/webcam/hauserbauer/current/1200.jpg | https://www.gasteinertal.com/webcam/dorfgastein-hauserbauer.html |
+| Angertal Skizentrum | https://www.gasteinertal.com/webcam/angertal/current/1200.jpg | https://www.gasteinertal.com/webcam/angertal.html |
 
 ## Nutzung
 
 Nach dem Kopieren in `custom_components/gasteinertal` und einem Neustart von Home Assistant erscheint die Integration unter `Einstellungen → Geräte & Dienste → Integration hinzufügen`.
+
+Die Nutzung erfolgt auf eigene Verantwortung. Aktualität, Richtigkeit und
+Verfügbarkeit der externen Datenquellen können nicht garantiert werden.
