@@ -2,7 +2,7 @@
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://github.com/hacs/integration)
 
-<img src="https://raw.githubusercontent.com/trollsoft7/gasteinertal-homeassistant/main/assets/gasteinertal-icon.svg" alt="Gasteinertal Icon" width="180" />
+<img src="https://raw.githubusercontent.com/trollsoft7/gasteinertal-homeassistant/main/custom_components/gasteinertal/brand/icon.png" alt="Gasteinertal Icon" width="180" />
 
 Home Assistant Custom Integration für Live-Daten aus dem Gasteinertal:
 
@@ -62,6 +62,7 @@ Dieses Repository ist als HACS-kompatible Custom Integration aufgebaut:
 - `hacs.json` vorhanden
 - `custom_components/gasteinertal/manifest.json` vorhanden
 - Ordnerstruktur entspricht dem HACS-Standard
+- Home Assistant Branding liegt in `custom_components/gasteinertal/brand/` und benötigt Home Assistant 2026.3 oder neuer
 
 ## Lizenz
 
