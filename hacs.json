@@ -2,5 +2,6 @@
   "name": "Gasteinertal",
   "homeassistant": "2024.7.0",
   "content_in_root": false,
-  "filename": "custom_components/gasteinertal.zip"
+  "filename": "custom_components/gasteinertal.zip",
+  "render_readme": true
 }

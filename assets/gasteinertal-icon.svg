@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Gasteinertal Icon</title>
+  <desc id="desc">A stylized Gastein icon with a mountain, wave and the word Gastein.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#0d3b66"/>
+      <stop offset="100%" stop-color="#0f766e"/>
+    </linearGradient>
+    <linearGradient id="wave" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0%" stop-color="#7dd3fc"/>
+      <stop offset="100%" stop-color="#bae6fd"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="40" fill="url(#bg)"/>
+  <path d="M70 365 L170 215 L245 285 L300 182 L442 365 Z" fill="#e2e8f0" opacity="0.96"/>
+  <path d="M80 330 C155 290, 210 295, 255 315 C330 345, 385 350, 435 325 L435 387 L80 387 Z" fill="url(#wave)" opacity="0.9"/>
+  <circle cx="386" cy="128" r="18" fill="#f8fafc" opacity="0.95"/>
+  <text x="256" y="255" text-anchor="middle" font-family="Verdana, Arial, sans-serif" font-weight="700" font-size="72" fill="#f8fafc" letter-spacing="2">GASTEIN</text>
+  <text x="256" y="310" text-anchor="middle" font-family="Verdana, Arial, sans-serif" font-size="18" fill="#dbeafe" letter-spacing="6">LIVE</text>
+</svg>
