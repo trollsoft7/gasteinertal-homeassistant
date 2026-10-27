@@ -24,21 +24,21 @@ WEATHER_WARNINGS = {
     "badgastein": {
         "name": "Bad Gastein",
         "url": (
-            "http://warnungen.zamg.ac.at/html/de/heute/alle/at/salzburg/"
+            "http://warnungen.zamg.at/html/de/heute/alle/at/salzburg/"
             "sankt_johann_im_pongau/badgastein/"
         ),
     },
     "badhofgastein": {
         "name": "Bad Hofgastein",
         "url": (
-            "http://warnungen.zamg.ac.at/html/de/heute/alle/at/salzburg/"
+            "http://warnungen.zamg.at/html/de/heute/alle/at/salzburg/"
             "sankt_johann_im_pongau/bad_hofgastein/"
         ),
     },
     "dorfgastein": {
         "name": "Dorfgastein",
         "url": (
-            "http://warnungen.zamg.ac.at/html/de/heute/alle/at/salzburg/"
+            "http://warnungen.zamg.at/html/de/heute/alle/at/salzburg/"
             "sankt_johann_im_pongau/dorfgastein/"
         ),
     },
