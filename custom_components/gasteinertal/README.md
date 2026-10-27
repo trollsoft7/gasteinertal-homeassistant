@@ -47,9 +47,9 @@ Ort heute mindestens eine Warnung gibt. Attribute enthalten die höchste
 Tages-Warnstufe (`0` bis `3`) und deren Farbe. Ein aktiver Sensor bedeutet
 nicht zwingend, dass die Warnung gerade jetzt gilt.
 
-- Bad Gastein: http://warnungen.zamg.ac.at/html/de/heute/alle/at/salzburg/sankt_johann_im_pongau/badgastein/
-- Bad Hofgastein: http://warnungen.zamg.ac.at/html/de/heute/alle/at/salzburg/sankt_johann_im_pongau/bad_hofgastein/
-- Dorfgastein: http://warnungen.zamg.ac.at/html/de/heute/alle/at/salzburg/sankt_johann_im_pongau/dorfgastein/
+- Bad Gastein: http://warnungen.zamg.at/html/de/heute/alle/at/salzburg/sankt_johann_im_pongau/badgastein/
+- Bad Hofgastein: http://warnungen.zamg.at/html/de/heute/alle/at/salzburg/sankt_johann_im_pongau/bad_hofgastein/
+- Dorfgastein: http://warnungen.zamg.at/html/de/heute/alle/at/salzburg/sankt_johann_im_pongau/dorfgastein/
 
 Die ZAMG-Seiten sind derzeit nur per HTTP erreichbar; Warnungsabfragen erfolgen
 daher unverschlüsselt.
