@@ -88,10 +88,22 @@ async def _async_fetch_warnings(session: ClientSession) -> dict[str, dict[str, A
     """Fetch today's warning level for each Gasteinertal municipality."""
 
     async def fetch_warning(key: str, url: str) -> tuple[str, dict[str, Any]]:
-        async with session.get(url) as response:
-            response.raise_for_status()
-            text = await response.text()
-        return key, parse_warning_level(text)
+        try:
+            async with session.get(url) as response:
+                response.raise_for_status()
+                text = await response.text()
+            parsed = parse_warning_level(text)
+            parsed["available"] = True
+            return key, parsed
+        except Exception as err:
+            # A changed warning page must not take down unrelated sensors.
+            return key, {
+                "active": False,
+                "level": None,
+                "level_name": "unavailable",
+                "available": False,
+                "error": str(err),
+            }
 
     results = await asyncio.gather(
         *(
