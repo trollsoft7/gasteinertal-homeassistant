@@ -63,6 +63,14 @@ class WeatherWarningSensor(CoordinatorEntity, BinarySensorEntity):
         }
 
     @property
+    def available(self) -> bool:
+        """Only report a state when the source returned a valid warning response."""
+        return (
+            super().available
+            and self.coordinator.data.get(self._warning_key, {}).get("available", True)
+        )
+
+    @property
     def is_on(self) -> bool:
         """Return whether a warning is issued at any time today."""
         return self.coordinator.data[self._warning_key]["active"]
