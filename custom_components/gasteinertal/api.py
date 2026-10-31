@@ -12,8 +12,6 @@ from typing import Any
 
 from aiohttp import ClientSession
 
-_LOGGER = logging.getLogger(__name__)
-
 from .const import (
     GEOSPHERE_STATION_ID,
     GEOSPHERE_DAILY_URL,
@@ -24,6 +22,8 @@ from .const import (
     WATER_URL,
     WEATHER_WARNINGS,
 )
+
+_LOGGER = logging.getLogger(__name__)
 
 
 async def async_fetch_data(session: ClientSession) -> dict[str, Any]:
@@ -45,31 +45,53 @@ async def async_fetch_data(session: ClientSession) -> dict[str, Any]:
         "station_ids": GEOSPHERE_STATION_ID,
     }
 
-    water_data, station_text, geosphere_data, warning_data = await asyncio.gather(
+    water_data, station_text, warning_data = await asyncio.gather(
         _async_fetch_json(session, WATER_URL),
         _async_fetch_text(session, STATION_URL),
-        _async_fetch_json(session, GEOSPHERE_URL, params=geosphere_params),
         _async_fetch_warnings(session),
     )
-    weather_data = parse_geosphere_data(geosphere_data)
 
-    # The year-to-date request can be large and the upstream daily endpoint
-    # occasionally returns HTTP 500. Keep that optional sensor from failing
-    # every other entity in the integration.
-    try:
-        yearly_precipitation_data = await asyncio.wait_for(
-            _async_fetch_json(session, GEOSPHERE_DAILY_URL, params=daily_params),
-            timeout=20,
-        )
-        yearly_precipitation = parse_yearly_precipitation(yearly_precipitation_data)
-        yearly_precipitation["bad_gastein_precipitation_ytd_available"] = True
-    except (ClientError, TimeoutError, ValueError) as err:
-        _LOGGER.warning("Unable to fetch yearly precipitation from GeoSphere: %s", err)
-        yearly_precipitation = {
-            "bad_gastein_precipitation_ytd": None,
-            "bad_gastein_precipitation_ytd_missing_days": None,
-            "bad_gastein_precipitation_ytd_available": False,
-        }
+    async def fetch_10min_data() -> dict[str, Any]:
+        """Fetch GeoSphere's 10-minute measurements without blocking other data."""
+        try:
+            data = await asyncio.wait_for(
+                _async_fetch_json(session, GEOSPHERE_URL, params=geosphere_params),
+                timeout=20,
+            )
+            return {
+                **parse_geosphere_data(data),
+                "bad_gastein_10min_available": True,
+            }
+        except (ClientError, TimeoutError, ValueError) as err:
+            _LOGGER.warning("Unable to fetch 10-minute GeoSphere data: %s", err)
+            return {
+                "bad_gastein_temperature": None,
+                "bad_gastein_precipitation": None,
+                "bad_gastein_10min_available": False,
+            }
+
+    async def fetch_yearly_precipitation() -> dict[str, Any]:
+        """Fetch the optional year-to-date precipitation total."""
+        try:
+            data = await asyncio.wait_for(
+                _async_fetch_json(session, GEOSPHERE_DAILY_URL, params=daily_params),
+                timeout=20,
+            )
+            return {
+                **parse_yearly_precipitation(data),
+                "bad_gastein_precipitation_ytd_available": True,
+            }
+        except (ClientError, TimeoutError, ValueError) as err:
+            _LOGGER.warning("Unable to fetch yearly precipitation from GeoSphere: %s", err)
+            return {
+                "bad_gastein_precipitation_ytd": None,
+                "bad_gastein_precipitation_ytd_missing_days": None,
+                "bad_gastein_precipitation_ytd_available": False,
+            }
+
+    weather_data, yearly_precipitation = await asyncio.gather(
+        fetch_10min_data(), fetch_yearly_precipitation()
+    )
 
     return {
         "water_level": parse_water_level(water_data),
