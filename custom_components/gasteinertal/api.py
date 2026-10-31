@@ -45,11 +45,26 @@ async def async_fetch_data(session: ClientSession) -> dict[str, Any]:
         "station_ids": GEOSPHERE_STATION_ID,
     }
 
-    water_data, station_text, warning_data = await asyncio.gather(
-        _async_fetch_json(session, WATER_URL),
-        _async_fetch_text(session, STATION_URL),
-        _async_fetch_warnings(session),
-    )
+    async def fetch_water_level() -> dict[str, Any]:
+        """Fetch the water level independently from other data sources."""
+        try:
+            data = await asyncio.wait_for(_async_fetch_json(session, WATER_URL), timeout=20)
+            return {"water_level": parse_water_level(data), "water_level_available": True}
+        except (ClientError, TimeoutError, ValueError) as err:
+            _LOGGER.warning("Unable to fetch water level: %s", err)
+            return {"water_level": None, "water_level_available": False}
+
+    async def fetch_mountain_temperature() -> dict[str, Any]:
+        """Fetch the mountain temperature independently from other sources."""
+        try:
+            text = await asyncio.wait_for(_async_fetch_text(session, STATION_URL), timeout=20)
+            return {
+                "mountain_temperature": parse_mountain_temperature(text),
+                "mountain_temperature_available": True,
+            }
+        except (ClientError, TimeoutError, ValueError) as err:
+            _LOGGER.warning("Unable to fetch Schlossalm temperature: %s", err)
+            return {"mountain_temperature": None, "mountain_temperature_available": False}
 
     async def fetch_10min_data() -> dict[str, Any]:
         """Fetch GeoSphere's 10-minute measurements without blocking other data."""
@@ -91,14 +106,24 @@ async def async_fetch_data(session: ClientSession) -> dict[str, Any]:
                 "bad_gastein_precipitation_ytd_available": False,
             }
 
-    weather_data, yearly_precipitation = await asyncio.gather(
-        fetch_10min_data(), fetch_yearly_precipitation()
+    (
+        water_data,
+        mountain_data,
+        weather_data,
+        yearly_precipitation,
+        warning_data,
+    ) = await asyncio.gather(
+        fetch_water_level(),
+        fetch_mountain_temperature(),
+        fetch_10min_data(),
+        fetch_yearly_precipitation(),
+        _async_fetch_warnings(session),
     )
 
     return {
-        "water_level": parse_water_level(water_data),
-        "mountain_temperature": parse_mountain_temperature(station_text),
         "precipitation_year": now.year,
+        **water_data,
+        **mountain_data,
         **weather_data,
         **yearly_precipitation,
         **warning_data,
@@ -126,7 +151,7 @@ async def _async_fetch_warnings(session: ClientSession) -> dict[str, dict[str, A
 
     async def fetch_warning(key: str, url: str) -> tuple[str, dict[str, Any]]:
         try:
-            async with session.get(url) as response:
+            async with session.get(url, timeout=20) as response:
                 response.raise_for_status()
                 text = await response.text()
             parsed = parse_warning_level(text)
