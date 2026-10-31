@@ -48,8 +48,13 @@ async def async_fetch_data(session: ClientSession) -> dict[str, Any]:
     async def fetch_water_level() -> dict[str, Any]:
         """Fetch the water level independently from other data sources."""
         try:
-            data = await asyncio.wait_for(_async_fetch_json(session, WATER_URL), timeout=20)
-            return {"water_level": parse_water_level(data), "water_level_available": True}
+            data = await asyncio.wait_for(
+                _async_fetch_json(session, WATER_URL), timeout=20
+            )
+            return {
+                "water_level": parse_water_level(data),
+                "water_level_available": True,
+            }
         except (ClientError, TimeoutError, ValueError) as err:
             _LOGGER.warning("Unable to fetch water level: %s", err)
             return {"water_level": None, "water_level_available": False}
@@ -57,14 +62,19 @@ async def async_fetch_data(session: ClientSession) -> dict[str, Any]:
     async def fetch_mountain_temperature() -> dict[str, Any]:
         """Fetch the mountain temperature independently from other sources."""
         try:
-            text = await asyncio.wait_for(_async_fetch_text(session, STATION_URL), timeout=20)
+            text = await asyncio.wait_for(
+                _async_fetch_text(session, STATION_URL), timeout=20
+            )
             return {
                 "mountain_temperature": parse_mountain_temperature(text),
                 "mountain_temperature_available": True,
             }
         except (ClientError, TimeoutError, ValueError) as err:
             _LOGGER.warning("Unable to fetch Schlossalm temperature: %s", err)
-            return {"mountain_temperature": None, "mountain_temperature_available": False}
+            return {
+                "mountain_temperature": None,
+                "mountain_temperature_available": False,
+            }
 
     async def fetch_10min_data() -> dict[str, Any]:
         """Fetch GeoSphere's 10-minute measurements without blocking other data."""
