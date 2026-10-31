@@ -101,18 +101,31 @@ class GasteinertalSensor(CoordinatorEntity, SensorEntity):
         )
 
     @property
-    def native_value(self) -> float:
-        """Return the latest measurement."""
-        return self.coordinator.data[self.entity_description.key]
+    def native_value(self) -> float | None:
+        """Return the latest measurement, if its source is available."""
+        return self.coordinator.data.get(self.entity_description.key)
+
+    @property
+    def available(self) -> bool:
+        """Mark only the yearly sensor unavailable when its optional source fails."""
+        if self.entity_description.key == "bad_gastein_precipitation_ytd":
+            return super().available and self.coordinator.data.get(
+                "bad_gastein_precipitation_ytd_available", True
+            )
+        return super().available
 
     @property
     def extra_state_attributes(self) -> dict[str, int]:
         """Return data completeness metadata for the yearly sum."""
         if self.entity_description.key != "bad_gastein_precipitation_ytd":
             return {}
-        return {
-            "jahr": self.coordinator.data["precipitation_year"],
-            "fehlende_tageswerte": self.coordinator.data[
+        attributes = {"jahr": self.coordinator.data["precipitation_year"]}
+        is_available = self.coordinator.data.get(
+            "bad_gastein_precipitation_ytd_available", True
+        )
+        attributes["daten_verfügbar"] = is_available
+        if is_available:
+            attributes["fehlende_tageswerte"] = self.coordinator.data[
                 "bad_gastein_precipitation_ytd_missing_days"
-            ],
-        }
+            ]
+        return attributes
