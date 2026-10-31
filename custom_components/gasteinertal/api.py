@@ -10,7 +10,7 @@ import re
 from datetime import datetime, timedelta, timezone
 from typing import Any
 
-from aiohttp import ClientSession
+from aiohttp import ClientError, ClientSession
 
 from .const import (
     GEOSPHERE_STATION_ID,
