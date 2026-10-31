@@ -107,14 +107,16 @@ class GasteinertalSensor(CoordinatorEntity, SensorEntity):
 
     @property
     def available(self) -> bool:
-        """Mark only the yearly sensor unavailable when its optional source fails."""
+        """Mark GeoSphere sensors unavailable when their optional source fails."""
         availability_key = {
             "bad_gastein_temperature": "bad_gastein_10min_available",
             "bad_gastein_precipitation": "bad_gastein_10min_available",
             "bad_gastein_precipitation_ytd": "bad_gastein_precipitation_ytd_available",
         }.get(self.entity_description.key)
         if availability_key is not None:
-            return super().available and self.coordinator.data.get(availability_key, True)
+            return super().available and self.coordinator.data.get(
+                availability_key, True
+            )
         return super().available
 
     @property
