@@ -109,6 +109,8 @@ class GasteinertalSensor(CoordinatorEntity, SensorEntity):
     def available(self) -> bool:
         """Mark GeoSphere sensors unavailable when their optional source fails."""
         availability_key = {
+            "water_level": "water_level_available",
+            "mountain_temperature": "mountain_temperature_available",
             "bad_gastein_temperature": "bad_gastein_10min_available",
             "bad_gastein_precipitation": "bad_gastein_10min_available",
             "bad_gastein_precipitation_ytd": "bad_gastein_precipitation_ytd_available",
