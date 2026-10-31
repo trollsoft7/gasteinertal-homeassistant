@@ -82,7 +82,9 @@ async def async_fetch_data(session: ClientSession) -> dict[str, Any]:
                 "bad_gastein_precipitation_ytd_available": True,
             }
         except (ClientError, TimeoutError, ValueError) as err:
-            _LOGGER.warning("Unable to fetch yearly precipitation from GeoSphere: %s", err)
+            _LOGGER.warning(
+                "Unable to fetch yearly precipitation from GeoSphere: %s", err
+            )
             return {
                 "bad_gastein_precipitation_ytd": None,
                 "bad_gastein_precipitation_ytd_missing_days": None,
